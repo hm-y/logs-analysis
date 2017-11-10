@@ -56,3 +56,16 @@ July 29, 2016 — 2.5% errors
    and place it in the same folder
    - Run the file analysis.py
    - Now, it is ready!
+
+### The views added to the database:  
+
+  - CREATE VIEW view_articles AS  
+    SELECT path, count(*) AS views  
+    FROM log  
+    WHERE path LIKE '/article/%'  
+    GROUP BY path ORDER BY views DESC;  
+    
+   - CREATE VIEW percentage_of_errors_by_day AS  
+     SELECT time::date AS date, CAST(count(\*) as decimal)*100/(SELECT count(\*) FROM log) AS percentage  
+     FROM log  
+     GROUP BY date;  
