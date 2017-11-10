@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 # "Database code" for the DB Newsdata.
 
 import psycopg2
@@ -7,59 +9,53 @@ DBNAME = "news"
 # QUESTION 1
 # Retrieve data for the question 1
 
-
-def top_articles():
-    """Return all posts from the 'database', most recent first."""
-    db = psycopg2.connect(database=DBNAME)
-    c = db.cursor()
-    sql = '''
-        select title, views
-        from articles join view_articles
-        on view_articles.path like '%' || articles.slug || '%'
-        order by views desc limit 3;
-    '''
-    c.execute(sql)
-    posts = c.fetchall()
-    db.close()
-    return posts
+query1 = '''
+    select title, views
+    from articles join view_articles
+    on view_articles.path like '%' || articles.slug || '%'
+    order by views desc limit 3;
+'''
+ 
 
 # QUESTION 2
 # Retrieve data for the question 1
 
-
-def top_authors():
-    """Return all posts from the 'database', most recent first."""
-    db = psycopg2.connect(database=DBNAME)
-    c = db.cursor()
-    sql = '''
-        select name, count(*) as popularity
-        from articles join authors on articles.author = authors.id
-        join view_articles
-        on view_articles.path like '%' || articles.slug || '%'
-        group by authors.name order by popularity desc limit 3;
-    '''
-    c.execute(sql)
-    posts = c.fetchall()
-    db.close()
-    return posts
+query2 = '''
+    select name, sum(views) as popularity
+	from authors 
+    join articles on authors.id = articles.author
+	join view_articles
+	  on view_articles.path like '%' || articles.slug || '%'
+	group by authors.name order by popularity desc;
+'''
 
 # QUESTION 3
 # Retrieve data for the question 1
 
+query3 = '''
+    select date, percentage
+    from percentage_of_errors_by_day
+    where percentage > 1;
+'''
 
-def failure_days():
-    """Return all posts from the 'database', most recent first."""
-    db = psycopg2.connect(database=DBNAME)
+# The query method to execute the right query for the answer
+
+
+def get_query_results(query):
+    db = psycopg2.connect(database="news")
     c = db.cursor()
-    sql = '''
-        select date, percentage
-        from percentage_of_errors_by_day
-        where percentage > 1;
-    '''
-    c.execute(sql)
-    posts = c.fetchall()
+    if query == 1:
+    	c.execute(query1)
+        print ("1 executed")
+    elif query == 2:
+    	c.execute(query2)
+        print ("2 executed")
+    elif query == 3:
+    	c.execute(query3)
+        print ("3 executed")
+    result = c.fetchall()
     db.close()
-    return posts
+    return result
 
 # The method to print data from the database
 # depending on the user choice
@@ -67,21 +63,15 @@ def failure_days():
 
 def get_data(question):
     t = 1
-    if question == 1:
-        for article in top_articles():
-            print str(t)+" - "+article[0]+"  ---  "+str(article[1])+" views"
-            t += 1
-
-    elif question == 2:
-        for author in top_authors():
-            print str(t)+" - "+str(author[0])+"  ---  "+str(author[1])+" views"
-            t += 1
-
-    elif question == 3:
-        for day in failure_days():
-            print str(t)+" - "+str(day[0])+"  ---  "
-            +str(round(day[1], 2))+"% errors"
-            t += 1
+    for item in get_query_results(question):
+        if question == 1:
+			print str(t)+" - "+item[0]+"  ---  "+str(item[1])+" views"
+        if question == 2:
+			print str(t)+" - "+str(item[0])+"  ---  "+str(item[1])+" views"
+        if question == 3:
+			print str(t)+" - "+str(item[0])+"  ---  "\
+                  + str(round(item[1], 2))+"% errors"
+        t += 1
 
 # Instructions and results to the user
 
