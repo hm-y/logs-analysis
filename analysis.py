@@ -33,9 +33,9 @@ query2 = '''
 # Retrieve data for the question 1
 
 query3 = '''
-    select date, percentage
-    from percentage_of_errors_by_day
-    where percentage > 1;
+    select time, err_pct
+    from err_percentages
+    where err_pct > 1;
 '''
 
 # The query method to execute the right query for the answer
@@ -46,13 +46,10 @@ def get_query_results(query):
     c = db.cursor()
     if query == 1:
     	c.execute(query1)
-        print ("1 executed")
     elif query == 2:
     	c.execute(query2)
-        print ("2 executed")
     elif query == 3:
     	c.execute(query3)
-        print ("3 executed")
     result = c.fetchall()
     db.close()
     return result
