@@ -9,19 +9,19 @@ DBNAME = "news"
 
 
 def top_articles():
-	"""Return all posts from the 'database', most recent first."""
-	db = psycopg2.connect(database=DBNAME)
-	c = db.cursor()
-	sql = '''
+    """Return all posts from the 'database', most recent first."""
+    db = psycopg2.connect(database=DBNAME)
+    c = db.cursor()
+    sql = '''
         select title, views
         from articles join view_articles
         on view_articles.path like '%' || articles.slug || '%'
         order by views desc limit 3;
     '''
-	c.execute(sql)
-	posts = c.fetchall()
-	db.close()
-	return posts
+    c.execute(sql)
+    posts = c.fetchall()
+    db.close()
+    return posts
 
 # QUESTION 2
 # Retrieve data for the question 1
@@ -79,10 +79,12 @@ def get_data(question):
 
     elif question == 3:
         for day in failure_days():
-            print str(t)+" - "+str(day[0])+"  ---  "+str(round(day[1], 2))+"% errors"
+            print str(t)+" - "+str(day[0])+"  ---  "
+            +str(round(day[1], 2))+"% errors"
             t += 1
 
 # Instructions and results to the user
+
 
 while True:
     print('--------------------------------------------------------')
