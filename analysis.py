@@ -15,18 +15,17 @@ query1 = '''
     on view_articles.path like '%' || articles.slug || '%'
     order by views desc limit 3;
 '''
- 
 
 # QUESTION 2
 # Retrieve data for the question 1
 
 query2 = '''
     select name, sum(views) as popularity
-	from authors 
+	from authors
     join articles on authors.id = articles.author
-	join view_articles
-	  on view_articles.path like '%' || articles.slug || '%'
-	group by authors.name order by popularity desc;
+    join view_articles
+    on view_articles.path like '%' || articles.slug || '%'
+    group by authors.name order by popularity desc;
 '''
 
 # QUESTION 3
@@ -45,11 +44,11 @@ def get_query_results(query):
     db = psycopg2.connect(database="news")
     c = db.cursor()
     if query == 1:
-    	c.execute(query1)
+        c.execute(query1)
     elif query == 2:
-    	c.execute(query2)
+        c.execute(query2)
     elif query == 3:
-    	c.execute(query3)
+        c.execute(query3)
     result = c.fetchall()
     db.close()
     return result
@@ -62,11 +61,11 @@ def get_data(question):
     t = 1
     for item in get_query_results(question):
         if question == 1:
-			print str(t)+" - "+item[0]+"  ---  "+str(item[1])+" views"
+            print str(t)+" - "+item[0]+"  ---  "+str(item[1])+" views"
         if question == 2:
-			print str(t)+" - "+str(item[0])+"  ---  "+str(item[1])+" views"
+            print str(t)+" - "+str(item[0])+"  ---  "+str(item[1])+" views"
         if question == 3:
-			print str(t)+" - "+str(item[0])+"  ---  "\
+            print str(t)+" - "+str(item[0])+"  ---  "\
                   + str(round(item[1], 2))+"% errors"
         t += 1
 
