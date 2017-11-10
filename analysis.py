@@ -79,8 +79,7 @@ def get_data(question):
 
     elif question == 3:
         for day in failure_days():
-            print str(t)+" - "+str(day[0])+"  ---  "
-            +str(round(day[1], 2))+"% errors"
+            print str(t)+" - "+str(day[0])+"  ---  "+str(round(day[1], 2))+"% errors"
             t += 1
 
 # Instructions and results to the user
