@@ -40,8 +40,19 @@ July 29, 2016 — 2.5% errors
 
 ### Example outputs:  
 
-First screen:  
-
-If the first option is chosen:  
-
+**First screen:**  
+  
+![First screen](img/main.png)
+  
+**If the first option is chosen:**  
+  
+![Question 1](img/option1.png)  
+  
 ### How to use:
+  
+  - Start you virtual machine and login  
+    -- vagrant up & vagrant ssh
+  - Download [the database file](https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip)
+   and place it in the same folder
+   - Run the file analysis.py
+   - Now, it is ready!
