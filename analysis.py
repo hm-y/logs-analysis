@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/env python
 
 # "Database code" for the DB Newsdata.
 
@@ -12,7 +12,7 @@ DBNAME = "news"
 query1 = '''
     select title, views
     from articles join view_articles
-    on view_articles.path like '/article/' || articles.slug
+    on view_articles.path = '/article/' || articles.slug
     order by views desc limit 3;
 '''
 
@@ -24,7 +24,7 @@ query2 = '''
 	from authors
     join articles on authors.id = articles.author
     join view_articles
-    on view_articles.path like '%' || articles.slug || '%'
+    on view_articles.path = '/article/' || articles.slug
     group by authors.name order by popularity desc;
 '''
 
@@ -41,6 +41,7 @@ query3 = '''
 
 
 def get_query_results(query):
+    '''Apply the chosen query, retrieve and return the data'''
     db = psycopg2.connect(database="news")
     c = db.cursor()
     if query == 1:
@@ -58,16 +59,16 @@ def get_query_results(query):
 
 
 def get_data(question):
-    t = 1
-    for item in get_query_results(question):
+    '''Print the retrieved data for the user choice'''
+    results = get_query_results(question)
+    for t, item in enumerate(results, 1):
         if question == 1:
             print str(t)+" - "+item[0]+"  ---  "+str(item[1])+" views"
         if question == 2:
             print str(t)+" - "+str(item[0])+"  ---  "+str(item[1])+" views"
         if question == 3:
-            print str(t)+" - "+str(item[0])+"  ---  "\
-                  + str(round(item[1], 2))+"% errors"
-        t += 1
+            print '{0}. {1:%B %d, %Y} --- {2:.2f}% errors'\
+                .format(t, item[0], item[1])
 
 # Instructions and results to the user
 
@@ -81,20 +82,25 @@ while True:
     print('4. Exit')
     print('--------------------------------------------------------')
     print('--------------------------------------------------------')
-    request = input('What data do you want: ')
+    try:
+        request = raw_input('What data do you want: ')
 
-    print('--------------------------------------------------------')
-    print('--------------------------------------------------------')
-    if (request == 1) or (request == 2) or (request == 3):
-        if request == 1:
-            print('-----------the most popular three articles------------')
-        elif request == 2:
-            print('-----------the most popular article authors-----------')
-        elif request == 3:
-            print('-----------the days with the errors more than 1%------')
         print('--------------------------------------------------------')
-        get_data(request)
-    elif request == 4:
+        print('--------------------------------------------------------')
+
+        if (request is '1') or (request is '2') or (request is '3'):
+            if request is '1':
+                print('-----------the most popular three articles------------')
+            elif request is '2':
+                print('-----------the most popular article authors-----------')
+            elif request is '3':
+                print('-----------the days with the errors more than 1%------')
+            print('--------------------------------------------------------')
+            get_data(eval(request))
+        elif request is '4':
+            exit()
+        else:
+            print('---------------Please, pick a correct option--------------')
+
+    except KeyboardInterrupt:
         exit()
-    else:
-        print('---------------Please, pick a correct option--------------')
