@@ -82,5 +82,4 @@ July 29, 2016 — 2.5% errors
      FROM log  
      GROUP BY time::date  
      ORDER BY time::date;  
-    ```
     
