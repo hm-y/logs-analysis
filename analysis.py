@@ -12,7 +12,7 @@ DBNAME = "news"
 query1 = '''
     select title, views
     from articles join view_articles
-    on view_articles.path like '%' || articles.slug || '%'
+    on view_articles.path like '/article/' || articles.slug
     order by views desc limit 3;
 '''
 
