@@ -56,7 +56,8 @@ July 29, 2016 — 2.5% errors
    and place it in the same folder
    - Import the file into the news database using the following psql command:  
     -- psql -d news -f newsdata.sql
-   - Run the file analysis.py
+   - Run the file analysis.py  
+    -- $ python analysis.py
    - Now, it is ready!
 
 ### The views added to the database:  
@@ -72,4 +73,4 @@ July 29, 2016 — 2.5% errors
             100.0 * sum(case when status != '200 OK' then 1 else 0 end) / count(*) AS err_pct  
      FROM log  
      GROUP BY time::date  
-     ORDE BY time::date;  
+     ORDER BY time::date;  
