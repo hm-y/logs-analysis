@@ -60,7 +60,8 @@ July 29, 2016 — 2.5% errors
     -- Unzip newsdata.zip first in order to extract newsdata.sql
    - Import the file into the news database using the following psql command:  
     -- psql -d news -f newsdata.sql
-   - Add the necessary views, which are shared below, to the database 
+   - Add the necessary views, which are shared below, to the database  
+   -- view_articles holds the article paths & the count of the views for each article, err_percentages holds the days and the error percentages of those days
    - Run the file analysis.py  
     -- $ python analysis.py
    - Now, it is ready!
