@@ -5,7 +5,9 @@ Analyzing the postgresql database
 
 ### The summary of the assignment:  
 to create a reporting tool that prints out reports (in plain text) based on the data 
-in [the given database](https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip).
+in [the given database](https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip).  
+  
+This project sets up a mock PostgreSQL database for a fictional news website. The provided Python script uses the psycopg2 library to query the database and produce a report.  
 
 **So what are we reporting, anyway?**  
 Here are the questions the reporting tool should answer. The example answers given aren't the right ones, though!  
@@ -51,26 +53,33 @@ July 29, 2016 — 2.5% errors
 ### How to use:
   
   - Start you virtual machine and login  
+    -- Using [the same environment](https://github.com/udacity/fullstack-nanodegree-vm/blob/master/vagrant/Vagrantfile) is recommended.  
     -- vagrant up & vagrant ssh
   - Download [the database file](https://d17h27t6h515a5.cloudfront.net/topher/2016/August/57b5f748_newsdata/newsdata.zip)
-   and place it in the same folder
+   and place it in the same folder  
+    -- Unzip newsdata.zip first in order to extract newsdata.sql
    - Import the file into the news database using the following psql command:  
     -- psql -d news -f newsdata.sql
+   - Add the necessary views, which are shared below, to the database 
    - Run the file analysis.py  
     -- $ python analysis.py
    - Now, it is ready!
 
 ### The views added to the database:  
 
-  - CREATE VIEW view_articles AS  
+  - ```sql
+    CREATE VIEW view_articles AS  
     SELECT path, count(*) AS views  
     FROM log  
-    WHERE path LIKE '/article/%' AND status != '200 OK'  
+    WHERE path LIKE '/article/%' AND status = '200 OK'  
     GROUP BY path ORDER BY views DESC;    
-
-   - CREATE VIEW err_percentages AS  
+    ```
+    
+   - ```sql
+     CREATE VIEW err_percentages AS  
      SELECT time::date,  
             100.0 * sum(case when status != '200 OK' then 1 else 0 end) / count(*) AS err_pct  
      FROM log  
      GROUP BY time::date  
      ORDER BY time::date;  
+    
