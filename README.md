@@ -1,7 +1,7 @@
 # logs-analysis
 Analyzing the postgresql database
 
-## **Udacity FSND - Logs Analysis Project**
+## **Logs Analysis Project**
 
 ### The summary of the assignment:  
 to create a reporting tool that prints out reports (in plain text) based on the data 
